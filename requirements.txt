@@ -1,0 +1,12 @@
+numpy
+ipykernel
+ipywidgets
+tqdm
+icecream
+pandas
+scipy
+matplotlib
+networkx
+pydot
+gplearn
+scikit-learn
