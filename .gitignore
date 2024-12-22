@@ -1,3 +1,7 @@
 # Virtual environment
 venv/
 
+# Data folder
+data/
+
+__pycache__/
