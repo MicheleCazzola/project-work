@@ -2,17 +2,27 @@ from copy import copy, deepcopy
 import operator
 import pprint
 import random
+from typing import Union
 import networkx as nx
 from networkx.drawing.nx_pydot import graphviz_layout
 import matplotlib.pyplot as plt
 import numpy as np
 import inspect
 
+def normalize(vector: list[float]) -> list[float]:
+    vector: np.ndarray = np.array(vector)
+    
+    if np.sum(vector) == 1:
+        return vector.tolist()
+    
+    return (vector / np.sum(vector)).tolist()
+
 class Operator:
-    def __init__(self, symbol, function, in_params):
+    def __init__(self, symbol, function, in_params, weight):
         self.symbol = symbol
         self.function = function
         self.fanin = in_params
+        self.weight = weight
         
     def __call__(self, *args):
         return self.function(*args)
@@ -235,11 +245,7 @@ class Tree:
         """Evaluate the tree for a given input."""
         def evaluate_node(node, x):
             
-            #print(node.root, node.children)
-            
             if not node.children:
-                
-                #print(f"Leaf: {node.root}, x: {x}")
                 
                 # It's a leaf node
                 if node.root in tree.variables:
@@ -250,12 +256,6 @@ class Tree:
                 # It's an operator node
                 params = [evaluate_node(child, x) for child in node.children]
                 
-                #print(params)
-                # min, max = np.finfo(np.float64).min, np.finfo(np.float64).max
-                # params = np.clip(params, min, max)
-                
-                # print(params)
-                
                 return node.root(*params)
 
         #print(X.T.shape, tree.variables)
@@ -264,7 +264,7 @@ class Tree:
     @staticmethod
     def mse(tree: "Tree", X: np.array, y_target: np.array) -> float:
         y_pred = Tree.evaluate(tree, X)
-        return (sum(np.clip((a - b), -1e150, 1e150) ** 2 for a, b in zip(y_target, y_pred)) / len(y_target)).astype(float)
+        return (sum((a - b) ** 2 for a, b in zip(y_target, y_pred)) / len(y_target)).astype(float)
 
     def __repr__(self):
         """Retrieve the formula from the tree by performing an in-order traversal."""
@@ -278,6 +278,12 @@ class Tree:
         return traverse(self)
 
 if __name__ == "__main__":
+    
+    import sys
+    w = [1, 2, 10]
+    r = normalize(w)
+    print(w, r)
+    sys.exit()
     
     # Define some example operators and variables
     built_in_operators = [
