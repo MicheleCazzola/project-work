@@ -1,0 +1,22 @@
+To: Alessandro Di Matteo
+Vanilla single-mutation Hill Climbing is correctly implemented, but it has its known limitations due to lack of exploration.
+
+Simulated annealing is good too, maybe the only improvement could be using a linear relationship between temperature and probabilty
+of accepting a worsening solution, instead of an exponential one. This strategy seems to have a great potential if run for more
+iterations, as you can see in your final plot.
+
+The variant with iterated local search may perform better if the restart point would be a global one, instead of the current best
+solution: in this way, the algorithm would be more oriented on exploration and it may escape some local maximum. Note that its plot
+is very similar to the first strategy one, thus they are maybe stuck in the same local maximum. Moreover, doing more repetitions
+(restarts) could lead to better results, even if time complexity is a though problem here.
+
+The self-adaptive variant gets similar results as simulated annealing with exponential adaptive temperature (second strategy). Here,
+you can try multiplicating strenght instead of summing a fixed quantity, in order to have a variation proportional to the previous
+value. By the way, these two algorithms have a similar structure and principles (alternate exploration and exploitation in some way),
+but the second one may be better after many iterations: unfortunately, the only way to know is to run it more!
+
+
+To: Anjali Vaghjiani
+Your solution is not related to set cover, but to knapsack problem.
+Anyway, it is a good and quite effective solution, which could be further improved by using simulated annealing with possibly a
+self-adaptive strategy.
